@@ -1,7 +1,127 @@
-<Solution>
-  <Configurations>
-    <Platform Name="x64" />
-    <Platform Name="x86" />
-  </Configurations>
-  <Project Path="task2/task2.vcxproj" Id="68dea36a-6dd9-4516-99fd-219143c052af" />
-</Solution>
+#include <stdio.h>
+#define MAX 10
+
+void inputMatrix(int mat[][MAX], int r, int c, char name);
+void displayMatrix(int mat[][MAX], int r, int c);
+void addMatrix(int a[][MAX], int b[][MAX], int res[][MAX], int r, int c);
+void multiplyMatrix(int a[][MAX], int b[][MAX], int res[][MAX], int r1, int c1, int c2);
+void transposeMatrix(int mat[][MAX], int trans[][MAX], int r, int c);
+
+int main() {
+    int a[MAX][MAX], b[MAX][MAX], result[MAX][MAX], trans[MAX][MAX];
+    int r1, c1, r2, c2, choice;
+
+    printf("===== MATRIX OPERATIONS =====\n");
+    printf("1. Matrix Addition\n");
+    printf("2. Matrix Multiplication\n");
+    printf("3. Matrix Transpose\n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
+
+    switch (choice) {
+
+    case 1:
+        printf("\nEnter rows and columns for Matrix A: ");
+        scanf("%d %d", &r1, &c1);
+
+        inputMatrix(a, r1, c1, 'A');
+        inputMatrix(b, r1, c1, 'B');
+
+        addMatrix(a, b, result, r1, c1);
+
+        printf("\nMatrix A:\n");
+        displayMatrix(a, r1, c1);
+
+        printf("Matrix B:\n");
+        displayMatrix(b, r1, c1);
+
+        printf("A + B =\n");
+        displayMatrix(result, r1, c1);
+        break;
+
+    case 2:
+        printf("\nEnter rows and cols for Matrix A: ");
+        scanf("%d %d", &r1, &c1);
+
+        printf("Enter rows and cols for Matrix B: ");
+        scanf("%d %d", &r2, &c2);
+
+        if (c1 != r2) {
+            printf("Error! Columns of A must equal rows of B.\n");
+            return 1;
+        }
+
+        inputMatrix(a, r1, c1, 'A');
+        inputMatrix(b, r2, c2, 'B');
+
+        multiplyMatrix(a, b, result, r1, c1, c2);
+
+        printf("\nMatrix A:\n");
+        displayMatrix(a, r1, c1);
+
+        printf("Matrix B:\n");
+        displayMatrix(b, r2, c2);
+
+        printf("A x B =\n");
+        displayMatrix(result, r1, c2);
+        break;
+
+    case 3:
+        printf("\nEnter rows and columns for Matrix: ");
+        scanf("%d %d", &r1, &c1);
+
+        inputMatrix(a, r1, c1, 'A');
+        transposeMatrix(a, trans, r1, c1);
+
+        printf("\nOriginal Matrix:\n");
+        displayMatrix(a, r1, c1);
+
+        printf("Transposed Matrix:\n");
+        displayMatrix(trans, c1, r1);
+        break;
+
+    default:
+        printf("Invalid choice!\n");
+    }
+
+    return 0;
+}
+
+void inputMatrix(int mat[][MAX], int r, int c, char name) {
+    printf("Enter elements of Matrix %c:\n", name);
+    for (int i = 0; i < r; i++)
+        for (int j = 0; j < c; j++) {
+            printf("  [%d][%d]: ", i, j);
+            scanf("%d", &mat[i][j]);
+        }
+}
+
+void displayMatrix(int mat[][MAX], int r, int c) {
+    for (int i = 0; i < r; i++) {
+        for (int j = 0; j < c; j++)
+            printf("%5d", mat[i][j]);
+        printf("\n");
+    }
+    printf("\n");
+}
+
+void addMatrix(int a[][MAX], int b[][MAX], int res[][MAX], int r, int c) {
+    for (int i = 0; i < r; i++)
+        for (int j = 0; j < c; j++)
+            res[i][j] = a[i][j] + b[i][j];
+}
+
+void multiplyMatrix(int a[][MAX], int b[][MAX], int res[][MAX], int r1, int c1, int c2) {
+    for (int i = 0; i < r1; i++)
+        for (int j = 0; j < c2; j++) {
+            res[i][j] = 0;
+            for (int k = 0; k < c1; k++)
+                res[i][j] += a[i][k] * b[k][j];
+        }
+}
+
+void transposeMatrix(int mat[][MAX], int trans[][MAX], int r, int c) {
+    for (int i = 0; i < r; i++)
+        for (int j = 0; j < c; j++)
+            trans[j][i] = mat[i][j];
+}
